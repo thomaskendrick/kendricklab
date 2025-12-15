@@ -1,3 +1,5 @@
+name: "Nginx Proxy Manager"
+
 services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
