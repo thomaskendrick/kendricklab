@@ -1,0 +1,18 @@
+services:
+  adguardhome:
+    container_name: adguardhome
+    image: adguard/adguardhome
+    restart: unless-stopped
+    ports:
+      # DNS Ports (Must remain directly exposed)
+      - "53:53/tcp"
+      - "53:53/udp"
+      
+      # Web Interface Mapping
+      # Format is "HOST_PORT:CONTAINER_PORT"
+      - "8080:80/tcp"  # Access UI via http://your-ip:8080
+      - "3022:3000/tcp" # Required for the initial setup wizard
+      
+    volumes:
+      - ./work:/opt/adguardhome/work
+      - ./conf:/opt/adguardhome/conf
