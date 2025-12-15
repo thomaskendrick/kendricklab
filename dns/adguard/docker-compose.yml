@@ -13,6 +13,10 @@ services:
       - "8080:80/tcp"  # Access UI via http://your-ip:8080
       - "3022:3000/tcp" # Required for the initial setup wizard
       
+      # DHCP Ports
+      - "192.168.0.41:67:67/udp"
+      - "192.168.0.41:68:68/udp"
+      
     volumes:
       - ./work:/opt/adguardhome/work
       - ./conf:/opt/adguardhome/conf
