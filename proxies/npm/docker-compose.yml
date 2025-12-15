@@ -24,5 +24,5 @@ services:
       # DISABLE_IPV6: 'true'
 
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - ${CONFIG_ROOT}/npm/data:/data
+      - ${CONFIG_ROOT}/npm/letsencrypt:/etc/letsencrypt
