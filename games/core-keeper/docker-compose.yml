@@ -1,0 +1,14 @@
+services:
+  core-keeper:
+    image: escaping/core-keeper-dedicated:latest
+    container_name: core-keeper-dedicated
+    restart: unless-stopped
+    stop_grace_period: 2m
+    # Port is only needed if using direct connection mode
+    # ports:
+    #   - "$SERVER_PORT:$SERVER_PORT/udp"
+    volumes:
+      - ./server-files:/home/steam/core-keeper-dedicated
+      - ./server-data:/home/steam/core-keeper-data
+    environment:
+      - DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/1449377878192947241/_fBMK0aw42CB4WCae-xJZSI887APRjOGCB1XwYK9gDEMPVdHeqH2OncvCNg9q1VNxDVn
