@@ -17,6 +17,7 @@ services:
       - ${CONFIG_ROOT}/traefik/traefik.yml:/traefik.yml:ro
       - ${CONFIG_ROOT}/traefik/acme.json:/acme.json
       - ${CONFIG_ROOT}/traefik/logs:/var/log/traefik
+      - ${CONFIG_ROOT}/traefik/dynamic:/etc/traefik/dynamic:ro
     secrets:
       - cf_dns_api_token
     labels:
