@@ -5,5 +5,5 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - ./work:/opt/adguardhome/work
-      - ./conf:/opt/adguardhome/conf
+      - ${CONFIG_ROOT}/adguard/work:/opt/adguardhome/work
+      - ${CONFIG_ROOT}/adguard/conf:/opt/adguardhome/conf
