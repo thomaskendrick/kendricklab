@@ -7,8 +7,13 @@ services:
       homepage.group: "DNS"
       homepage.name: "AdGuard Home"
       homepage.icon: "adguard-home.png"
-      homepage.href: "http://<HOST_IP>:80"
+      homepage.href: "https://adguard.${DOMAIN}"
       homepage.description: "DNS Sinkhole"
+      traefik.enable: "true"
+      traefik.http.routers.adguard.rule: "Host(`adguard.${DOMAIN}`)"
+      traefik.http.routers.adguard.entrypoints: "https"
+      traefik.http.routers.adguard.tls.certresolver: "cloudflare"
+      traefik.http.services.adguard.loadbalancer.server.url: "http://${HOST_IP}:3000"
     network_mode: host
     volumes:
       - ${CONFIG_ROOT}/adguard/work:/opt/adguardhome/work
