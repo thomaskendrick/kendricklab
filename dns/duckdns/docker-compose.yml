@@ -1,0 +1,17 @@
+services:
+  duckdns:
+    container_name: duckdns
+    image: lscr.io/linuxserver/duckdns:latest
+    restart: unless-stopped
+    environment:
+      - SUBDOMAINS=${DUCKDNS_SUBDOMAINS}
+      - TOKEN=${DUCKDNS_TOKEN}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/duckdns/config:/config
+    labels:
+      homepage.group: "DNS"
+      homepage.name: "DuckDNS"
+      homepage.icon: "duckdns.png"
+      homepage.href: "https://www.duckdns.org"
+      homepage.description: "Dynamic DNS Updater"
