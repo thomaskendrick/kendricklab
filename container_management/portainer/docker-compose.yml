@@ -7,8 +7,14 @@ services:
       homepage.group: "Management"
       homepage.name: "Portainer"
       homepage.icon: "portainer.png"
-      homepage.href: "https://portainer:9443"
+      homepage.href: "https://portainer.${DOMAIN}"
       homepage.description: "Container Management"
+      traefik.enable: "true"
+      traefik.http.routers.portainer.rule: "Host(`portainer.${DOMAIN}`)"
+      traefik.http.routers.portainer.entrypoints: "https"
+      traefik.http.routers.portainer.tls.certresolver: "cloudflare"
+      traefik.http.services.portainer.loadbalancer.server.url: "https://${HOST_IP}:9443"
+      traefik.http.services.portainer.loadbalancer.serverstransport: "insecure@file"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
