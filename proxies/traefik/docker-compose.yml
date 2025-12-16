@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_dns_api_token
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${CONFIG_ROOT}/traefik/traefik.yml:/traefik.yml:ro
+      - ${CONFIG_ROOT}/traefik/acme.json:/acme.json
+      - ${CONFIG_ROOT}/traefik/logs:/var/log/traefik
+    secrets:
+      - cf_dns_api_token
+    labels:
+      # Dashboard
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+      - "traefik.http.routers.traefik.entrypoints=https"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+      # Basic Auth Middleware
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=user:$$apr1$$q8eZFHjF$$Fj9U0fCH4d13F5j3v3v3w0 
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
+
+secrets:
+  cf_dns_api_token:
+    file: ${CONFIG_ROOT}/traefik/secrets/cf_dns_api_token
