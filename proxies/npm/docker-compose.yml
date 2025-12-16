@@ -4,6 +4,12 @@ services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
+    labels:
+      homepage.group: "Proxies"
+      homepage.name: "Nginx Proxy Manager"
+      homepage.icon: "nginx-proxy-manager.png"
+      homepage.href: "http://npm:81"
+      homepage.description: "Reverse Proxy"
 
     ports:
       # These ports are in format <host-port>:<container-port>

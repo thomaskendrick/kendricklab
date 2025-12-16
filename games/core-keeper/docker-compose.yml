@@ -3,6 +3,11 @@ services:
     image: escaping/core-keeper-dedicated:latest
     container_name: core-keeper-dedicated
     restart: unless-stopped
+    labels:
+      homepage.group: "Games"
+      homepage.name: "Core Keeper"
+      homepage.icon: "core-keeper.png"
+      homepage.description: "Game Server"
     stop_grace_period: 2m
     # Port is only needed if using direct connection mode
     # ports:

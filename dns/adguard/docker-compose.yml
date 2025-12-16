@@ -3,6 +3,12 @@ services:
     container_name: adguardhome
     image: adguard/adguardhome
     restart: unless-stopped
+    labels:
+      homepage.group: "DNS"
+      homepage.name: "AdGuard Home"
+      homepage.icon: "adguard-home.png"
+      homepage.href: "http://<HOST_IP>:80"
+      homepage.description: "DNS Sinkhole"
     network_mode: host
     volumes:
       - ${CONFIG_ROOT}/adguard/work:/opt/adguardhome/work

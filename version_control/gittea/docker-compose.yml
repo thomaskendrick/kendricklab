@@ -12,6 +12,12 @@ services:
       - USER_UID=1000
       - USER_GID=1000
     restart: always
+    labels:
+      homepage.group: "Version Control"
+      homepage.name: "Gitea"
+      homepage.icon: "gitea.png"
+      homepage.href: "http://gitea:3000"
+      homepage.description: "Git Server"
     networks:
       - gitea
     volumes:
