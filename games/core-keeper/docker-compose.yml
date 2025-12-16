@@ -6,7 +6,7 @@ services:
     labels:
       homepage.group: "Games"
       homepage.name: "Core Keeper"
-      homepage.icon: "core-keeper.png"
+      homepage.icon: "https://cdn2.steamgriddb.com/icon/f21e81ff7fd73e8ed6cc5240d53263be.ico"
       homepage.description: "Game Server"
     stop_grace_period: 2m
     # Port is only needed if using direct connection mode
