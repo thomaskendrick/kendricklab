@@ -7,10 +7,10 @@ services:
       homepage.href: "https://zerobyte.${DOMAIN}"
       homepage.description: "Self-hosted backup solution"
       traefik.enable: "true"
-      traefik.http.routers.adguard.rule: "Host(`zerobyte.${DOMAIN}`)"
-      traefik.http.routers.adguard.entrypoints: "https"
-      traefik.http.routers.adguard.tls.certresolver: "cloudflare"
-      traefik.http.services.adguard.loadbalancer.server.url: "http://${HOST_IP}:4096"
+      traefik.http.routers.zerobyte.rule: "Host(`zerobyte.${DOMAIN}`)"
+      traefik.http.routers.zerobyte.entrypoints: "https"
+      traefik.http.routers.zerobyte.tls.certresolver: "cloudflare"
+      traefik.http.services.zerobyte.loadbalancer.server.url: "http://${HOST_IP}:4096"
     image: ghcr.io/nicotsx/zerobyte:v0.19
     container_name: zerobyte
     restart: unless-stopped
