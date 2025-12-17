@@ -26,4 +26,4 @@ services:
       - ${CONFIG_ROOT}/:/container_data
       - /etc/localtime:/etc/localtime:ro
       - /var/lib/zerobyte:/var/lib/zerobyte
-      - ~/.config/rclone:/root/.config/rclone
+      - /home/naivegarmur/.config/rclone:/root/.config/rclone
