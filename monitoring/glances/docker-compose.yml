@@ -1,0 +1,21 @@
+services:
+  monitoring:
+    image: nicolargo/glances:ubuntu-latest-full
+    pid: host
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /run/user/1000/podman/podman.sock:/run/user/1000/podman/podman.sock
+    labels:
+      homepage.group: "Monitoring"
+      homepage.name: "Glances"
+      homepage.icon: "glances.png"
+      homepage.href: "https://glances.${DOMAIN}"
+      homepage.description: "System Monitoring"
+      traefik.enable: "true"
+      traefik.http.routers.glances.rule: "Host(`glances.${DOMAIN}`)"
+      traefik.http.routers.glances.entrypoints: "https"
+      traefik.http.routers.glances.tls.certresolver: "cloudflare"
+      traefik.http.services.glances.loadbalancer.server.url: "http://${HOST_IP}:61208"
+    environment:
+      - "GLANCES_OPT=-w"
