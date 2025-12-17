@@ -27,6 +27,7 @@ The backbone of the operation. Without these, nothing talks to anything.
 
 *   **DNS / AdBlocker**: `dns/adguard` - AdGuard Home for network-wide ad blocking and DNS management.
 *   **Reverse Proxy**: `proxies/npm` - Nginx Proxy Manager to handle SSL and route traffic.
+*   **Remote Access**: `remote_access/cloudflared` - Cloudflare Tunnel for secure remote access.
 
 ```text
   __  __                                                   _   
@@ -67,6 +68,8 @@ Because all work and no play makes the server a dull boy.
 ├── media/
 ├── proxies/
 │   └── npm/
+├── remote_access/
+│   └── cloudflared/
 ├── version_control/
 │   └── gittea/
 └── volumes/

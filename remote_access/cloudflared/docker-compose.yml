@@ -1,0 +1,16 @@
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    volumes:
+      - ${CONFIG_ROOT}/cloudflared:/etc/cloudflared
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    labels:
+      homepage.group: "Remote Access"
+      homepage.name: "Cloudflared"
+      homepage.icon: "cloudflare.png"
+      homepage.href: "https://one.dash.cloudflare.com"
+      homepage.description: "Cloudflare Tunnel"
