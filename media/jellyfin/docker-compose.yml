@@ -14,8 +14,6 @@ services:
     ports:
       - 8096:8096
     restart: unless-stopped
-    networks:
-      - traefik_proxy
     labels:
       # Traefik
       - "traefik.enable=true"
@@ -42,8 +40,6 @@ services:
     ports:
       - 5055:5055
     restart: unless-stopped
-    networks:
-      - traefik_proxy
     labels:
       # Traefik
       - "traefik.enable=true"
