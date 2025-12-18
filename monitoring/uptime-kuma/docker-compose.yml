@@ -12,7 +12,7 @@ services:
       homepage.href: "https://status.${DOMAIN}/status/homelab"
       homepage.description: "Uptime Monitoring"
       homepage.widget.type: "uptimekuma"
-      homepage.widget.url: "https://status.kendricklab.uk/status/homelab"
+      homepage.widget.url: "https://status.kendricklab.uk/"
       homepage.widget.slug: "homelab"
       traefik.enable: "true"
       traefik.http.routers.uptime-kuma.rule: "Host(`status.${DOMAIN}`)"
