@@ -1,0 +1,95 @@
+version: "3.8"
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_PATH}/jellyfin/config:/config
+      - ${MEDIA_PATH}:/media
+    ports:
+      - 8096:8096
+    restart: unless-stopped
+    networks:
+      - traefik_proxy
+    labels:
+      # Traefik
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.${DOMAIN}`)"
+      - "traefik.http.routers.jellyfin.entrypoints=websecure"
+      - "traefik.http.routers.jellyfin.tls.certresolver=cloudflare"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      - "traefik.docker.network=traefik_proxy"
+      # Homepage
+      - "homepage.group=Media"
+      - "homepage.name=Jellyfin"
+      - "homepage.icon=jellyfin.svg"
+      - "homepage.href=https://jellyfin.${DOMAIN}"
+      - "homepage.description=Media Server"
+
+  jellyseerr:
+    image: lscr.io/linuxserver/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_PATH}/jellyseerr/config:/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+    networks:
+      - traefik_proxy
+    labels:
+      # Traefik
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyseerr.rule=Host(`jellyseerr.${DOMAIN}`)"
+      - "traefik.http.routers.jellyseerr.entrypoints=websecure"
+      - "traefik.http.routers.jellyseerr.tls.certresolver=cloudflare"
+      - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
+      - "traefik.docker.network=traefik_proxy"
+      # Homepage
+      - "homepage.group=Media"
+      - "homepage.name=Jellyseerr"
+      - "homepage.icon=jellyseerr.svg"
+      - "homepage.href=https://jellyseerr.${DOMAIN}"
+      - "homepage.description=Request management"
+
+  jellystat:
+    image: cyfersnake/jellystat:latest
+    container_name: jellystat
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_PATH}/jellystat/config:/config
+      - ${DOCKER_PATH}/jellyfin/config:/data:ro
+    ports:
+      - 8008:8008
+    restart: unless-stopped
+    networks:
+      - traefik_proxy
+    labels:
+      # Traefik
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellystat.rule=Host(`jellystat.${DOMAIN}`)"
+      - "traefik.http.routers.jellystat.entrypoints=websecure"
+      - "traefik.http.routers.jellystat.tls.certresolver=cloudflare"
+      - "traefik.http.services.jellystat.loadbalancer.server.port=8008"
+      - "traefik.docker.network=traefik_proxy"
+      # Homepage
+      - "homepage.group=Media"
+      - "homepage.name=Jellystat"
+      - "homepage.icon=jellystat.svg"
+      - "homepage.href=https://jellystat.${DOMAIN}"
+      - "homepage.description=Jellyfin statistics"
+
+networks:
+  traefik_proxy:
+    external: true
