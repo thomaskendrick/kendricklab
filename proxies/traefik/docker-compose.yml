@@ -31,7 +31,11 @@ services:
       - "traefik.http.middlewares.traefik-auth.basicauth.users=user:$$apr1$$q8eZFHjF$$Fj9U0fCH4d13F5j3v3v3w0 
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
     networks:
-      - traefik_proxy
+      - traefik_public
+
+networks:
+  traefik_public:
+    name: traefik_public
 
 secrets:
   cf_dns_api_token:

@@ -3,6 +3,8 @@ version: "3"
 networks:
   gitea:
     external: false
+  traefik_public:
+    external: true
 
 services:
   server:
@@ -23,7 +25,8 @@ services:
       traefik.http.routers.gitea.rule: "Host(`gitea.${DOMAIN}`)"
       traefik.http.routers.gitea.entrypoints: "https"
       traefik.http.routers.gitea.tls.certresolver: "cloudflare"
-      traefik.http.services.gitea.loadbalancer.server.url: "http://${HOST_IP}:3000"
+      traefik.http.routers.gitea.service: "gitea"
+      traefik.http.services.gitea.loadbalancer.server.port: "3000"
       # SSH
       traefik.tcp.routers.gitea-ssh.rule: "HostSNI(`git.${DOMAIN}`)"
       traefik.tcp.routers.gitea-ssh.entrypoints: "https"
@@ -32,10 +35,12 @@ services:
       traefik.tcp.services.gitea-ssh.loadbalancer.server.address: "${HOST_IP}:222"
     networks:
       - gitea
+      - traefik_public
     volumes:
       - ${CONFIG_ROOT}/gitea:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    expose:
+      - "3000"
     ports:
-      - "3000:3000"
       - "222:22"

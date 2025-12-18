@@ -13,14 +13,19 @@ services:
       traefik.http.routers.portainer.rule: "Host(`portainer.${DOMAIN}`)"
       traefik.http.routers.portainer.entrypoints: "https"
       traefik.http.routers.portainer.tls.certresolver: "cloudflare"
-      traefik.http.services.portainer.loadbalancer.server.url: "https://${HOST_IP}:9443"
+      traefik.http.routers.portainer.service: "portainer"
+      traefik.http.services.portainer.loadbalancer.server.port: "9443"
+      traefik.http.services.portainer.loadbalancer.server.scheme: "https"
       traefik.http.services.portainer.loadbalancer.serverstransport: "insecure@file"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-    ports:
-      - 9443:9443
-      - 8000:8000  # Remove if you do not intend to use Edge Agents
+    expose:
+      - 9443
+      - 8000  # Remove if you do not intend to use Edge Agents
+    networks:
+      - default
+      - traefik_public
 
 volumes:
   portainer_data:
@@ -28,4 +33,6 @@ volumes:
 
 networks:
   default:
-    name: kendricklab 
+    name: kendricklab
+  traefik_public:
+    external: true

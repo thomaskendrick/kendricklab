@@ -15,3 +15,9 @@ services:
       homepage.icon: "duckdns.png"
       homepage.href: "https://www.duckdns.org"
       homepage.description: "Dynamic DNS Updater"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true

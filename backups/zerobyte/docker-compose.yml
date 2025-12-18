@@ -10,14 +10,15 @@ services:
       traefik.http.routers.zerobyte.rule: "Host(`zerobyte.${DOMAIN}`)"
       traefik.http.routers.zerobyte.entrypoints: "https"
       traefik.http.routers.zerobyte.tls.certresolver: "cloudflare"
-      traefik.http.services.zerobyte.loadbalancer.server.url: "http://${HOST_IP}:4096"
+      traefik.http.routers.zerobyte.service: "zerobyte"
+      traefik.http.services.zerobyte.loadbalancer.server.port: "4096"
     image: ghcr.io/nicotsx/zerobyte:v0.19
     container_name: zerobyte
     restart: unless-stopped
     cap_add:
       - SYS_ADMIN
-    ports:
-      - "4096:4096"
+    expose:
+      - "4096"
     devices:
       - /dev/fuse:/dev/fuse
     environment:
@@ -27,3 +28,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/lib/zerobyte:/var/lib/zerobyte
       - /home/naivegarmur/.config/rclone:/root/.config/rclone
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true

@@ -2,8 +2,8 @@ services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
-    ports:
-      - 3001:3000
+    expose:
+      - 3000
     volumes:
       - ${CONFIG_ROOT}/homepage/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -20,4 +20,11 @@ services:
       traefik.http.routers.homepage.rule: "Host(`${DOMAIN}`)"
       traefik.http.routers.homepage.entrypoints: "https"
       traefik.http.routers.homepage.tls.certresolver: "cloudflare"
-      traefik.http.services.homepage.loadbalancer.server.url: "http://${HOST_IP}:3001"
+      traefik.http.routers.homepage.service: "homepage"
+      traefik.http.services.homepage.loadbalancer.server.port: "3000"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true

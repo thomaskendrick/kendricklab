@@ -11,22 +11,25 @@ services:
     volumes:
       - ${DOCKER_PATH}/jellyfin/config:/config
       - ${MEDIA_PATH}:/media
-    ports:
-      - 8096:8096
+    expose:
+      - 8096
     restart: unless-stopped
     labels:
       # Traefik
       traefik.enable: "true"
       traefik.http.routers.jellyfin.rule: "Host(`jellyfin.${DOMAIN}`)"
       traefik.http.routers.jellyfin.entrypoints: "https"
+      traefik.http.routers.jellyfin.service: "jellyfin"
       traefik.http.routers.jellyfin.tls.certresolver: "cloudflare"
-      traefik.http.services.jellyfin.loadbalancer.server.url: "http://${HOST_IP}:8096"
+      traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
       # Homepage
       homepage.group: "Media"
       homepage.name: "Jellyfin"
       homepage.icon: "jellyfin.svg"
       homepage.href: "https://jellyfin.${DOMAIN}"
       homepage.description: "Media Server"
+    networks:
+      - traefik_public
   jellyseerr:
     image: fallenbagel/jellyseerr
     container_name: jellyseerr
@@ -36,19 +39,26 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ${DOCKER_PATH}/jellyseerr/config:/config
-    ports:
-      - 5055:5055
+    expose:
+      - 5055
     restart: unless-stopped
     labels:
       # Traefik
       traefik.enable: "true"
       traefik.http.routers.jellyseerr.rule: "Host(`jellyseerr.${DOMAIN}`)"
       traefik.http.routers.jellyseerr.entrypoints: "https"
+      traefik.http.routers.jellyseerr.service: "jellyseerr"
       traefik.http.routers.jellyseerr.tls.certresolver: "cloudflare"
-      traefik.http.services.jellyseerr.loadbalancer.server.url: "http://${HOST_IP}:5055"
+      traefik.http.services.jellyseerr.loadbalancer.server.port: "5055"
       # Homepage
       homepage.group: "Media"
       homepage.name: "Jellyseerr"
       homepage.icon: "jellyseerr.svg"
       homepage.href: "https://jellyseerr.${DOMAIN}"
       homepage.description: "Request management"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true

@@ -18,7 +18,14 @@ services:
       traefik.http.routers.uptime-kuma.rule: "Host(`status.${DOMAIN}`)"
       traefik.http.routers.uptime-kuma.entrypoints: "https"
       traefik.http.routers.uptime-kuma.tls.certresolver: "cloudflare"
-      traefik.http.services.uptime-kuma.loadbalancer.server.url: "http://${HOST_IP}:3222"
-    ports:
+      traefik.http.routers.uptime-kuma.service: "uptime-kuma"
+      traefik.http.services.uptime-kuma.loadbalancer.server.port: "3001"
+    expose:
       # <Host Port>:<Container Port>
-      - "3222:3001"
+      - "3001"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true

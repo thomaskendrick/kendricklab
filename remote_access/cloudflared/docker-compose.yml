@@ -14,3 +14,9 @@ services:
       homepage.icon: "cloudflare.png"
       homepage.href: "https://one.dash.cloudflare.com"
       homepage.description: "Cloudflare Tunnel"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true

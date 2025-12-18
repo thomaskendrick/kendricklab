@@ -17,3 +17,9 @@ services:
       - ${CONFIG_ROOT}/core-keeper/server-data:/home/steam/core-keeper-data
     environment:
       - DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/1449377878192947241/_fBMK0aw42CB4WCae-xJZSI887APRjOGCB1XwYK9gDEMPVdHeqH2OncvCNg9q1VNxDVn
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true
