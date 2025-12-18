@@ -34,3 +34,6 @@ services:
 secrets:
   cf_dns_api_token:
     file: ${CONFIG_ROOT}/traefik/secrets/cf_dns_api_token
+
+networks:
+  traefik_proxy:
