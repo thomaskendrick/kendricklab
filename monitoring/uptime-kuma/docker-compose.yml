@@ -11,7 +11,7 @@ services:
       homepage.icon: "uptime-kuma.png"
       homepage.href: "https://status.${DOMAIN}/status/homelab"
       homepage.description: "Uptime Monitoring"
-      homepage.widget.type: "uptime-kuma"
+      homepage.widget.type: "uptimekuma"
       homepage.widget.url: "https://status.kendricklab.uk/status/homelab"
       homepage.widget.slug: "homelab"
       traefik.enable: "true"
