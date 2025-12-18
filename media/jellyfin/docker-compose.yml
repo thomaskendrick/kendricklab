@@ -16,18 +16,17 @@ services:
     restart: unless-stopped
     labels:
       # Traefik
-      - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.${DOMAIN}`)"
-      - "traefik.http.routers.jellyfin.entrypoints=https"
-      - "traefik.http.routers.jellyfin.tls.certresolver=cloudflare"
-      - "traefik.http.services.jellyfin.loadbalancer.server.url=http://${HOST_IP}:8096"
+      traefik.enable: "true"
+      traefik.http.routers.jellyfin.rule: "Host(`jellyfin.${DOMAIN}`)"
+      traefik.http.routers.jellyfin.entrypoints: "https"
+      traefik.http.routers.jellyfin.tls.certresolver: "cloudflare"
+      traefik.http.services.jellyfin.loadbalancer.server.url: "http://${HOST_IP}:8096"
       # Homepage
-      - "homepage.group=Media"
-      - "homepage.name=Jellyfin"
-      - "homepage.icon=jellyfin.svg"
-      - "homepage.href=https://jellyfin.${DOMAIN}"
-      - "homepage.description=Media Server"
-
+      homepage.group: "Media"
+      homepage.name: "Jellyfin"
+      homepage.icon: "jellyfin.svg"
+      homepage.href: "https://jellyfin.${DOMAIN}"
+      homepage.description: "Media Server"
   jellyseerr:
     image: fallenbagel/jellyseerr
     container_name: jellyseerr
@@ -42,14 +41,14 @@ services:
     restart: unless-stopped
     labels:
       # Traefik
-      - "traefik.enable=true"
-      - "traefik.http.routers.jellyseerr.rule=Host(`jellyseerr.${DOMAIN}`)"
-      - "traefik.http.routers.jellyseerr.entrypoints=https"
-      - "traefik.http.routers.jellyseerr.tls.certresolver=cloudflare"
-      - "traefik.http.services.jellyseerr.loadbalancer.server.url=http://${HOST_IP}:5055"
+      traefik.enable: "true"
+      traefik.http.routers.jellyseerr.rule: Host(`jellyseerr.${DOMAIN}`)"
+      traefik.http.routers.jellyseerr.entrypoints: "https"
+      traefik.http.routers.jellyseerr.tls.certresolver: "cloudflare"
+      traefik.http.services.jellyseerr.loadbalancer.server.url: "http://${HOST_IP}:5055"
       # Homepage
-      - "homepage.group=Media"
-      - "homepage.name=Jellyseerr"
-      - "homepage.icon=jellyseerr.svg"
-      - "homepage.href=https://jellyseerr.${DOMAIN}"
-      - "homepage.description=Request management"
+      homepage.group: "Media"
+      homepage.name: "Jellyseerr"
+      homepage.icon: "jellyseerr.svg"
+      homepage.href: "https://jellyseerr.${DOMAIN}"
+      homepage.description: "Request management"
