@@ -61,7 +61,7 @@ services:
       - "homepage.description=Request management"
 
   jellystat:
-    image: cyfersnake/jellystat:latest
+    image: cyfershepard/jellystat:latest
     container_name: jellystat
     environment:
       - PUID=1000
