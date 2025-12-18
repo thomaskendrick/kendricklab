@@ -30,10 +30,9 @@ services:
       # Basic Auth Middleware
       - "traefik.http.middlewares.traefik-auth.basicauth.users=user:$$apr1$$q8eZFHjF$$Fj9U0fCH4d13F5j3v3v3w0 
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
+    networks:
+      - traefik_proxy
 
 secrets:
   cf_dns_api_token:
     file: ${CONFIG_ROOT}/traefik/secrets/cf_dns_api_token
-
-networks:
-  traefik_proxy:
