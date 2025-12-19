@@ -61,6 +61,11 @@ services:
       traefik.http.routers.authentik.entrypoints: "https"
       traefik.http.routers.authentik.tls.certresolver: "cloudflare"
       traefik.http.services.authentik.loadbalancer.server.port: "9000"
+      # Authentik Outpost (Handling auth callbacks for all domains)
+      traefik.http.routers.authentik-outpost.rule: "HostRegexp(`{host:.+}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      traefik.http.routers.authentik-outpost.entrypoints: "https"
+      traefik.http.routers.authentik-outpost.tls.certresolver: "cloudflare"
+      traefik.http.routers.authentik-outpost.service: "authentik"
       # Homepage
       homepage.group: "Management"
       homepage.name: "Authentik"
