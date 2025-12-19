@@ -60,6 +60,11 @@ services:
       traefik.http.routers.authentik.rule: "Host(`auth.${DOMAIN}`)"
       traefik.http.routers.authentik.entrypoints: "https"
       traefik.http.routers.authentik.tls.certresolver: "cloudflare"
+      # Authentik Outpost Router (prevents redirect loops)
+      traefik.http.routers.authentik-outpost.rule: "HostRegexp(`{host:.+}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      traefik.http.routers.authentik-outpost.entrypoints: "https"
+      traefik.http.routers.authentik-outpost.tls.certresolver: "cloudflare"
+      traefik.http.routers.authentik-outpost.service: "authentik"
       traefik.http.services.authentik.loadbalancer.server.port: "9000"
       # Authentik Middleware
       traefik.http.middlewares.authentik.forwardauth.address: "http://authentik-server:9000/outpost.goauthentik.io/auth/traefik"
