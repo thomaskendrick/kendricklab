@@ -131,6 +131,18 @@ services:
       homepage.href: "https://nzbget.${DOMAIN}"
       homepage.description: "Usenet Downloader"
 
+  recommendarr:
+    image: dansondergaard/recommendarr:latest
+    container_name: recommendarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${CONFIG_ROOT}/recommendarr:/config
+    restart: unless-stopped
+
 networks:
   traefik_public:
     external: true
