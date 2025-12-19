@@ -35,7 +35,7 @@ services:
       - authentik_internal
 
   server:
-    image: ghcr.io/goauthentik/server:2024.12.0
+    image: ghcr.io/goauthentik/server:latest
     container_name: authentik-server
     restart: unless-stopped
     command: server
