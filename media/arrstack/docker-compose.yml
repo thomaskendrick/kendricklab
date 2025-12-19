@@ -132,7 +132,7 @@ services:
       homepage.description: "Usenet Downloader"
 
   recommendarr:
-    image: dansondergaard/recommendarr:latest
+    image: tannermiddleton/recommendarr:latest
     container_name: recommendarr
     network_mode: service:gluetun
     environment:
