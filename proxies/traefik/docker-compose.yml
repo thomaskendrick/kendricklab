@@ -21,6 +21,12 @@ services:
     secrets:
       - cf_dns_api_token
     labels:
+      # Homepage
+      - "homepage.group=Proxies"
+      - "homepage.name=Traefik"
+      - "homepage.icon=traefik.svg"
+      - "homepage.href=https://traefik.${DOMAIN}"
+      - "homepage.description=Traefik Dashboard"
       # Dashboard
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
