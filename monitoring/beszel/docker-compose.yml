@@ -1,0 +1,36 @@
+services:
+  beszel:
+    image: 'henrygd/beszel'
+    container_name: beszel
+    restart: unless-stopped
+    volumes:
+      - ${CONFIG_ROOT}/beszel/data:/beszel_data
+    labels:
+      homepage.group: "Monitoring"
+      homepage.name: "Beszel"
+      homepage.icon: "beszel.png"
+      homepage.href: "https://beszel.${DOMAIN}"
+      homepage.description: "Lightweight Server Monitoring"
+      traefik.enable: "true"
+      traefik.http.routers.beszel.rule: "Host(`beszel.${DOMAIN}`)"
+      traefik.http.routers.beszel.entrypoints: "https"
+      traefik.http.routers.beszel.tls.certresolver: "cloudflare"
+      traefik.http.routers.beszel.service: "beszel"
+      traefik.http.services.beszel.loadbalancer.server.port: "8090"
+    networks:
+      - traefik_public
+
+  beszel-agent:
+    image: "henrygd/beszel-agent"
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      PORT: 45876
+      KEY: "${BESZEL_AGENT_KEY}"
+
+networks:
+  traefik_public:
+    external: true
