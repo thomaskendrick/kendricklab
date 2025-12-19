@@ -9,7 +9,6 @@ services:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       start_period: 20s
       interval: 30s
-      retry: 5
       timeout: 5s
     volumes:
       - ${CONFIG_ROOT}/authentik/postgres:/var/lib/postgresql/data
