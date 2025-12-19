@@ -61,6 +61,10 @@ services:
       traefik.http.routers.authentik.entrypoints: "https"
       traefik.http.routers.authentik.tls.certresolver: "cloudflare"
       traefik.http.services.authentik.loadbalancer.server.port: "9000"
+      # Authentik Middleware
+      traefik.http.middlewares.authentik.forwardauth.address: "http://authentik-server:9000/outpost.goauthentik.io/auth/traefik"
+      traefik.http.middlewares.authentik.forwardauth.trustForwardHeader: "true"
+      traefik.http.middlewares.authentik.forwardauth.authResponseHeaders: "X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version"
       # Homepage
       homepage.group: "Management"
       homepage.name: "Authentik"
