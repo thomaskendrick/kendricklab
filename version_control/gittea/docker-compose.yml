@@ -1,8 +1,6 @@
 version: "3"
 
 networks:
-  gitea:
-    external: false
   traefik_public:
     external: true
 
@@ -34,7 +32,6 @@ services:
       traefik.tcp.routers.gitea-ssh.tls.passthrough: "true"
       traefik.tcp.services.gitea-ssh.loadbalancer.server.address: "${HOST_IP}:222"
     networks:
-      - gitea
       - traefik_public
     volumes:
       - ${CONFIG_ROOT}/gitea:/data
