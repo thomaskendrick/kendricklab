@@ -130,34 +130,6 @@ services:
       homepage.icon: "nzbget.svg"
       homepage.href: "https://nzbget.${DOMAIN}"
       homepage.description: "Usenet Downloader"
-
-  recommendarr:
-    image: tannermiddleton/recommendarr:latest
-    container_name: recommendarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-    volumes:
-      - ${CONFIG_ROOT}/recommendarr:/config
-    restart: unless-stopped
-    labels:
-      # Traefik
-      traefik.enable: "true"
-      traefik.http.routers.recommendarr.rule: "Host(`recommendarr.${DOMAIN}`)"
-      traefik.http.routers.recommendarr.entrypoints: "https"
-      traefik.http.routers.recommendarr.service: "recommendarr"
-      traefik.http.routers.recommendarr.tls.certresolver: "cloudflare"
-      traefik.http.services.recommendarr.loadbalancer.server.port: "3000"
-      # Homepage
-      homepage.group: "Media"
-      homepage.name: "Recommendarr"
-      homepage.icon: "recommendarr.svg"
-      homepage.href: "https://recommendarr.${DOMAIN}"
-      homepage.description: "AI Powered media recommendations"
-    networks:
-      - traefik_public
-
 networks:
   traefik_public:
     external: true
