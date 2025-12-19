@@ -69,7 +69,7 @@ services:
       homepage.description: "Identity Provider"
 
   worker:
-    image: ghcr.io/goauthentik/server:2024.12.0
+    image: ghcr.io/goauthentik/server:latest
     container_name: authentik-worker
     restart: unless-stopped
     command: worker
