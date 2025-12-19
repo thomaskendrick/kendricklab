@@ -1,0 +1,108 @@
+version: "3.8"
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${PROTONVPN_WIREGUARD_PRIVATE_KEY}
+      - SERVER_COUNTRIES=Netherlands
+    volumes:
+      - ${CONFIG_ROOT}/gluetun:/gluetun
+    ports:
+      - 7878:7878 # Radarr
+      - 8989:8989 # Sonarr
+      - 9696:9696 # Prowlarr
+    restart: unless-stopped
+    networks:
+      - traefik_public
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${CONFIG_ROOT}/radarr:/config
+      - ${MEDIA_PATH}:/media
+    restart: unless-stopped
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN}`)"
+      traefik.http.routers.radarr.entrypoints: "https"
+      traefik.http.routers.radarr.service: "radarr"
+      traefik.http.routers.radarr.tls.certresolver: "cloudflare"
+      traefik.http.services.radarr.loadbalancer.server.port: "7878"
+      # Homepage
+      homepage.group: "Media"
+      homepage.name: "Radarr"
+      homepage.icon: "radarr.svg"
+      homepage.href: "https://radarr.${DOMAIN}"
+      homepage.description: "Movie Manager"
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${CONFIG_ROOT}/sonarr:/config
+      - ${MEDIA_PATH}:/media
+    restart: unless-stopped
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.sonarr.rule: "Host(`sonarr.${DOMAIN}`)"
+      traefik.http.routers.sonarr.entrypoints: "https"
+      traefik.http.routers.sonarr.service: "sonarr"
+      traefik.http.routers.sonarr.tls.certresolver: "cloudflare"
+      traefik.http.services.sonarr.loadbalancer.server.port: "8989"
+      # Homepage
+      homepage.group: "Media"
+      homepage.name: "Sonarr"
+      homepage.icon: "sonarr.svg"
+      homepage.href: "https://sonarr.${DOMAIN}"
+      homepage.description: "TV Series Manager"
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${CONFIG_ROOT}/prowlarr:/config
+    restart: unless-stopped
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${DOMAIN}`)"
+      traefik.http.routers.prowlarr.entrypoints: "https"
+      traefik.http.routers.prowlarr.service: "prowlarr"
+      traefik.http.routers.prowlarr.tls.certresolver: "cloudflare"
+      traefik.http.services.prowlarr.loadbalancer.server.port: "9696"
+      # Homepage
+      homepage.group: "Media"
+      homepage.name: "Prowlarr"
+      homepage.icon: "prowlarr.svg"
+      homepage.href: "https://prowlarr.${DOMAIN}"
+      homepage.description: "Indexer Manager"
+
+networks:
+  traefik_public:
+    external: true
