@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+  postgresql:
+    image: docker.io/library/postgres:16-alpine
+    container_name: authentik-postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retry: 5
+      timeout: 5s
+    volumes:
+      - ${CONFIG_ROOT}/authentik/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_USER: ${PG_USER:-authentik}
+      POSTGRES_DB: ${PG_DB:-authentik}
+    networks:
+      - authentik_internal
+
+  redis:
+    image: docker.io/library/redis:alpine
+    container_name: authentik-redis
+    command: --save 60 1 --loglevel warning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retry: 5
+      timeout: 5s
+    volumes:
+      - ${CONFIG_ROOT}/authentik/redis:/data
+    networks:
+      - authentik_internal
+
+  server:
+    image: ghcr.io/goauthentik/server:latest
+    container_name: authentik-server
+    restart: unless-stopped
+    command: server
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
+    volumes:
+      - ${CONFIG_ROOT}/authentik/media:/media
+      - ${CONFIG_ROOT}/authentik/custom-templates:/templates
+    networks:
+      - authentik_internal
+      - traefik_public
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.authentik.rule: "Host(`auth.${DOMAIN}`)"
+      traefik.http.routers.authentik.entrypoints: "https"
+      traefik.http.routers.authentik.tls.certresolver: "cloudflare"
+      traefik.http.services.authentik.loadbalancer.server.port: "9000"
+      # Homepage
+      homepage.group: "Management"
+      homepage.name: "Authentik"
+      homepage.icon: "authentik.svg"
+      homepage.href: "https://auth.${DOMAIN}"
+      homepage.description: "Identity Provider"
+
+  worker:
+    image: ghcr.io/goauthentik/server:latest
+    container_name: authentik-worker
+    restart: unless-stopped
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONFIG_ROOT}/authentik/media:/media
+      - ${CONFIG_ROOT}/authentik/certs:/certs
+      - ${CONFIG_ROOT}/authentik/custom-templates:/templates
+    networks:
+      - authentik_internal
+
+networks:
+  authentik_internal:
+    driver: bridge
+  traefik_public:
+    external: true

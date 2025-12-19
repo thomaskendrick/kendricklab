@@ -39,6 +39,7 @@ The backbone of the operation. Without these, nothing talks to anything.
 ```
 Tools to keep the ship sailing smooth.
 
+*   **Access Management**: `access_management/authentik` - Identity provider and SSO service (Authentik).
 *   **Container Management**: `container_management/portainer` - Visual management for Docker.
 *   **Version Control**: `version_control/gittea` - Self-hosted Git service (Gitea).
 
