@@ -35,7 +35,7 @@ services:
       - authentik_internal
 
   server:
-    image: ghcr.io/goauthentik/server:latest
+    image: ghcr.io/goauthentik/server:2024.12.0
     container_name: authentik-server
     restart: unless-stopped
     command: server
@@ -56,6 +56,7 @@ services:
     labels:
       # Traefik
       traefik.enable: "true"
+      traefik.docker.network: "traefik_public"
       traefik.http.routers.authentik.rule: "Host(`auth.${DOMAIN}`)"
       traefik.http.routers.authentik.entrypoints: "https"
       traefik.http.routers.authentik.tls.certresolver: "cloudflare"
@@ -68,7 +69,7 @@ services:
       homepage.description: "Identity Provider"
 
   worker:
-    image: ghcr.io/goauthentik/server:latest
+    image: ghcr.io/goauthentik/server:2024.12.0
     container_name: authentik-worker
     restart: unless-stopped
     command: worker
