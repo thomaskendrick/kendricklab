@@ -13,7 +13,7 @@ services:
       - BROWSER_WEB_URL=http://chrome:9222
       - DATA_DIR=/data
     volumes:
-      - ${CONFIG_ROOT}/karakeep/data:/app/data
+      - ${CONFIG_ROOT}/karakeep/data:/data
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_public"
