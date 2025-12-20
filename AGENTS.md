@@ -37,6 +37,7 @@ Each subdirectory containing a `docker-compose.yml` is intended to be deployed a
 -   **Repository URL:** This git repository.
 -   **Compose Path:** Relative path to the file (e.g., `proxies/traefik/docker-compose.yml`).
 -   **Environment Variables:** injected via the Portainer UI ("Environment variables" section) for each stack. Do not hardcode secrets in Git.
+-   **Security:** Never include actual secrets (API keys, passwords) in `docker-compose.yml`. Use environment variable placeholders (e.g., `${API_KEY}`).
 
 ## 4. Common Patterns & Configuration
 

@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  karakeep:
+    image: ghcr.io/karakeep-app/karakeep:latest
+    container_name: karakeep
+    restart: unless-stopped
+    depends_on:
+      - meilisearch
+      - chrome
+    environment:
+      - KARAKEEP_VERSION=${KARAKEEP_VERSION:-latest}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+      - NEXTAUTH_URL=https://karakeep.${DOMAIN}
+    volumes:
+      - ${CONFIG_ROOT}/karakeep/data:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.karakeep.rule=Host(`karakeep.${DOMAIN}`)"
+      - "traefik.http.routers.karakeep.entrypoints=https"
+      - "traefik.http.routers.karakeep.tls.certresolver=cloudflare"
+      - "traefik.http.services.karakeep.loadbalancer.server.port=3000"
+      - "homepage.group=Bookmarks"
+      - "homepage.name=Karakeep"
+      - "homepage.icon=karakeep.png"
+      - "homepage.href=https://karakeep.${DOMAIN}"
+      - "homepage.description=AI Bookmarking Tool"
+    networks:
+      - traefik_public
+      - internal
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.7
+    container_name: karakeep-meilisearch
+    restart: unless-stopped
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+      - MEILI_NO_ANALYTICS=true
+    volumes:
+      - ${CONFIG_ROOT}/karakeep/meili_data:/meili_data
+    networks:
+      - internal
+
+  chrome:
+    image: ghcr.io/karakeep-app/chrome:latest
+    container_name: karakeep-chrome
+    restart: unless-stopped
+    networks:
+      - internal
+
+networks:
+  traefik_public:
+    external: true
+  internal:
+    driver: bridge
