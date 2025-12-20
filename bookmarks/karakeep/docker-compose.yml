@@ -31,7 +31,7 @@ services:
       - internal
 
   meilisearch:
-    image: getmeili/meilisearch:v1.7
+    image: getmeili/meilisearch:latest
     container_name: karakeep-meilisearch
     restart: unless-stopped
     environment:
