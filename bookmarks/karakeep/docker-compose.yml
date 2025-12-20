@@ -12,6 +12,7 @@ services:
       - MEILI_ADDR=http://meilisearch:7700
       - BROWSER_WEB_URL=http://chrome:9222
       - DATA_DIR=/data
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
     volumes:
       - ${CONFIG_ROOT}/karakeep/data:/data
     labels:
