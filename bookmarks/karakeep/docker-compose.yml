@@ -9,10 +9,9 @@ services:
       - meilisearch
       - chrome
     environment:
-      - KARAKEEP_VERSION=${KARAKEEP_VERSION:-latest}
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
-      - NEXTAUTH_URL=https://karakeep.${DOMAIN}
+      - MEILI_ADDR: http://meilisearch:7700
+      - BROWSER_WEB_URL: http://chrome:9222
+      - DATA_DIR: /data
     volumes:
       - ${CONFIG_ROOT}/karakeep/data:/app/data
     labels:
