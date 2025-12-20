@@ -21,15 +21,18 @@ services:
       - traefik_public
 
   beszel-agent:
-    image: "henrygd/beszel-agent"
+    image: henrygd/beszel-agent
     container_name: beszel-agent
     restart: unless-stopped
     network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${CONFIG_ROOT}/beszel_agent_data:/var/lib/beszel-agent
     environment:
-      PORT: 45876
-      KEY: "${BESZEL_AGENT_KEY}"
+      LISTEN: 45876
+      KEY: ${BESZEL_KEY}
+      TOKEN: ${BESZEL_TOKEN} 
+      HUB_URL: https://beszel.${DOMAIN}
 
 networks:
   traefik_public:
