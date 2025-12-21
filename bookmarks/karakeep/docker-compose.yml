@@ -18,6 +18,13 @@ services:
       - OPENAI_API_KEY=${GEMINI_API_KEY}
       - INFERENCE_TEXT_MODEL=gemini-2.5-flash
       - INFERENCE_IMAGE_MODEL=gemini-2.5-flash
+      - OAUTH_CLIENT_ID=${OAUTH_AUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - OAUTH_WELLKNOWN_URL=https://auth.${DOMAIN}/application/o/karakeep/.well-known/openid-configuration
+      - OAUTH_PROVIDER_NAME=authentik
+      - OAUTH_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING=true
+      - DISABLE_PASSWORD_AUTH=true
+      - DISABLE_SIGNUPS=true
     volumes:
       - ${CONFIG_ROOT}/karakeep/data:/data
     labels:
