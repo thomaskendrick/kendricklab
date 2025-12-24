@@ -12,6 +12,20 @@ services:
         - ${CONFIG_ROOT}/speedtest-tracker:/config
     networks:
       - traefik_public
+    labels:
+      homepage.group: "Monitoring"
+      homepage.name: "Speedtest Tracker"
+      homepage.icon: "sh-speedtest-tracker.png"
+      homepage.href: "https://speedtest.${DOMAIN}"
+      homepage.description: "Internet speed tracking"
+      traefik.enable: "true"
+      traefik.http.routers.speedtest-tracker.rule: "Host(`speedtest.${DOMAIN}`)"
+      traefik.http.routers.speedtest-tracker.entrypoints: "https"
+      traefik.http.routers.speedtest-tracker.tls.certresolver: "cloudflare"
+      traefik.http.routers.speedtest-tracker.service: "speedtest-tracker"
+      traefik.http.services.speedtest-tracker.loadbalancer.server.port: "8080"
+    expose:
+      - "8080"
 
 networks:
   traefik_public:
