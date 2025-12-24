@@ -8,6 +8,8 @@ services:
         - PGID=1000
         - APP_KEY=${APP_KEY}
         - DB_CONNECTION=sqlite
+        - SPEEDTEST_SCHEDULE=0 * * * *
+        - APP_TIMEZONE=Europe/London
     volumes:
         - ${CONFIG_ROOT}/speedtest-tracker:/config
     networks:
