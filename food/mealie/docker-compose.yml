@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:latest
+    container_name: mealie
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - BASE_URL=https://mealie.${DOMAIN}
+      - ALLOW_SIGNUP=true
+    volumes:
+      - ${CONFIG_ROOT}/mealie/data:/app/data
+    expose:
+      - 9000
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.mealie.rule: "Host(`mealie.${DOMAIN}`)"
+      traefik.http.routers.mealie.entrypoints: "https"
+      traefik.http.routers.mealie.tls.certresolver: "cloudflare"
+      traefik.http.routers.mealie.service: "mealie"
+      traefik.http.services.mealie.loadbalancer.server.port: "9000"
+      # Homepage
+      homepage.group: "Food"
+      homepage.name: "Mealie"
+      homepage.icon: "mealie.png"
+      homepage.href: "https://mealie.${DOMAIN}"
+      homepage.description: "Recipe Manager"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true
