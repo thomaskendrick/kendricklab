@@ -12,7 +12,7 @@ services:
       - VPN_SERVICE_PROVIDER=protonvpn
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY=${PROTONVPN_WIREGUARD_PRIVATE_KEY}
-      - SERVER_COUNTRIES=Netherlands
+      - SERVER_COUNTRIES=Austria,Germany,Netherlands
     volumes:
       - ${CONFIG_ROOT}/gluetun:/gluetun
     ports:
