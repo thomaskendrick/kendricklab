@@ -20,6 +20,7 @@ services:
     labels:
       # Traefik
       traefik.enable: "true"
+      traefik.docker.network: "traefik_public"
       traefik.http.routers.booklore.rule: "Host(`booklore.${DOMAIN}`)"
       traefik.http.routers.booklore.entrypoints: "https"
       traefik.http.routers.booklore.tls.certresolver: "cloudflare"
