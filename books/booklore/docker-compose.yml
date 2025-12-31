@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   booklore:
     image: booklore/booklore:latest
@@ -8,8 +6,6 @@ services:
     depends_on:
       - mariadb
     environment:
-      - USER_ID=1000
-      - GROUP_ID=1000
       - TZ=Etc/UTC
       - DATABASE_URL=jdbc:mariadb://mariadb:3306/booklore
       - DATABASE_USERNAME=${BOOKLORE_DB_USER:-booklore}
