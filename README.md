@@ -53,6 +53,7 @@ Tools to keep the ship sailing smooth.
 ```
 Because all work and no play makes the server a dull boy.
 
+*   **Books**: `books/booklore` - eBook management (Booklore).
 *   **Games**: `games/core-keeper` - Dedicated server for Core Keeper.
 *   **Media**: `media/` - (Coming Soon) The media stack.
 
@@ -60,6 +61,8 @@ Because all work and no play makes the server a dull boy.
 
 ```
 .
+├── books/
+│   └── booklore/
 ├── container_management/
 │   └── portainer/
 ├── dns/

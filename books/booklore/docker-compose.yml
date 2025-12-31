@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  booklore:
+    image: booklore/booklore:latest
+    container_name: booklore
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    environment:
+      - USER_ID=1000
+      - GROUP_ID=1000
+      - TZ=Etc/UTC
+      - DATABASE_URL=jdbc:mariadb://mariadb:3306/booklore
+      - DATABASE_USERNAME=${BOOKLORE_DB_USER:-booklore}
+      - DATABASE_PASSWORD=${BOOKLORE_DB_PASSWORD}
+    volumes:
+      - ${CONFIG_ROOT}/booklore/data:/app/data
+      - ${MEDIA_PATH}/books:/books
+      - ${MEDIA_PATH}/bookdrop:/bookdrop
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_public"
+      - "traefik.http.routers.booklore.rule=Host(`booklore.${DOMAIN}`)"
+      - "traefik.http.routers.booklore.entrypoints=https"
+      - "traefik.http.routers.booklore.tls.certresolver=cloudflare"
+      - "traefik.http.services.booklore.loadbalancer.server.port=8080"
+      - "homepage.group=Books"
+      - "homepage.name=Booklore"
+      - "homepage.icon=booklore.png"
+      - "homepage.href=https://booklore.${DOMAIN}"
+      - "homepage.description=eBook Manager"
+    networks:
+      - traefik_public
+      - internal
+
+  mariadb:
+    image: mariadb:10.6
+    container_name: booklore-mariadb
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=${BOOKLORE_DB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=booklore
+      - MARIADB_USER=${BOOKLORE_DB_USER:-booklore}
+      - MARIADB_PASSWORD=${BOOKLORE_DB_PASSWORD}
+    volumes:
+      - ${CONFIG_ROOT}/booklore/db:/var/lib/mysql
+    networks:
+      - internal
+
+networks:
+  traefik_public:
+    external: true
+  internal:
+    driver: bridge
