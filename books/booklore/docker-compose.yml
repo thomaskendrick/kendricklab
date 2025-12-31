@@ -1,51 +1,71 @@
 services:
   booklore:
     image: booklore/booklore:latest
+    # Alternative: Use GitHub Container Registry
+    # image: ghcr.io/booklore-app/booklore:latest
     container_name: booklore
-    restart: unless-stopped
-    depends_on:
-      - mariadb
     environment:
-      - TZ=Etc/UTC
-      - DATABASE_URL=jdbc:mariadb://mariadb:3306/booklore
-      - DATABASE_USERNAME=${BOOKLORE_DB_USER:-booklore}
-      - DATABASE_PASSWORD=${BOOKLORE_DB_PASSWORD}
+      - USER_ID=${APP_USER_ID}
+      - GROUP_ID=${APP_GROUP_ID}
+      - TZ=${TZ}
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_USERNAME=${DB_USER}
+      - DATABASE_PASSWORD=${DB_PASSWORD}
+      - BOOKLORE_PORT=${BOOKLORE_PORT}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    expose:
+      - "${BOOKLORE_PORT}"
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.booklore.rule: "Host(`booklore.${DOMAIN}`)"
+      traefik.http.routers.booklore.entrypoints: "https"
+      traefik.http.routers.booklore.tls.certresolver: "cloudflare"
+      traefik.http.routers.booklore.service: "booklore"
+      traefik.http.services.booklore.loadbalancer.server.port: "${BOOKLORE_PORT}"
+      # Homepage
+      homepage.group: "Books"
+      homepage.name: "BookLore"
+      homepage.icon: "booklore.png"
+      homepage.href: "https://booklore.${DOMAIN}"
+      homepage.description: "Book Manager"
+    networks:
+      - traefik_public
+      - default
     volumes:
       - ${CONFIG_ROOT}/booklore/data:/app/data
       - ${MEDIA_PATH}/books:/books
       - ${MEDIA_PATH}/bookdrop:/bookdrop
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik_public"
-      - "traefik.http.routers.booklore.rule=Host(`booklore.${DOMAIN}`)"
-      - "traefik.http.routers.booklore.entrypoints=https"
-      - "traefik.http.routers.booklore.tls.certresolver=cloudflare"
-      - "traefik.http.services.booklore.loadbalancer.server.port=8080"
-      - "homepage.group=Books"
-      - "homepage.name=Booklore"
-      - "homepage.icon=booklore.png"
-      - "homepage.href=https://booklore.${DOMAIN}"
-      - "homepage.description=eBook Manager"
-    networks:
-      - traefik_public
-      - internal
+    healthcheck:
+      test: wget -q -O - http://localhost:${BOOKLORE_PORT}/api/v1/healthcheck
+      interval: 60s
+      retries: 5
+      start_period: 60s
+      timeout: 10s
+    restart: unless-stopped
 
   mariadb:
-    image: mariadb:10.6
-    container_name: booklore-mariadb
-    restart: unless-stopped
+    image: lscr.io/linuxserver/mariadb:11.4.5
+    container_name: mariadb
     environment:
-      - MARIADB_ROOT_PASSWORD=${BOOKLORE_DB_ROOT_PASSWORD}
-      - MARIADB_DATABASE=booklore
-      - MARIADB_USER=${BOOKLORE_DB_USER:-booklore}
-      - MARIADB_PASSWORD=${BOOKLORE_DB_PASSWORD}
+      - PUID=${DB_USER_ID}
+      - PGID=${DB_GROUP_ID}
+      - TZ=${TZ}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     volumes:
-      - ${CONFIG_ROOT}/booklore/db:/var/lib/mysql
-    networks:
-      - internal
+      - ./mariadb/config:/config
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "mariadb-admin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 networks:
   traefik_public:
     external: true
-  internal:
-    driver: bridge
