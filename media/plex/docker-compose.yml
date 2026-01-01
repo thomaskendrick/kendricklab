@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card1:/dev/dri/card1
+    group_add:
+      - "992" # Replace this with your host's 'render' group ID
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - VERSION=docker
+    volumes:
+      - ${DOCKER_PATH}/plex/config:/config
+      - ${MEDIA_PATH}:/media
+    expose:
+      - 32400
+    restart: unless-stopped
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.plex.rule: "Host(`plex.${DOMAIN}`)"
+      traefik.http.routers.plex.entrypoints: "https"
+      traefik.http.routers.plex.service: "plex"
+      traefik.http.routers.plex.tls.certresolver: "cloudflare"
+      traefik.http.services.plex.loadbalancer.server.port: "32400"
+      # Homepage
+      homepage.group: "Media"
+      homepage.name: "Plex"
+      homepage.icon: "plex.svg"
+      homepage.href: "https://plex.${DOMAIN}"
+      homepage.description: "Media Server"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true

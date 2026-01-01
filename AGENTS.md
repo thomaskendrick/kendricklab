@@ -68,7 +68,7 @@ Common variables expected across stacks:
 | **Dashboards**       | Homepage |
 | **DNS**              | AdGuard Home, DuckDNS |
 | **Games**            | Core Keeper |
-| **Media**            | ArrStack (Radarr/Sonarr etc.), Jellyfin |
+| **Media**            | ArrStack (Radarr/Sonarr etc.), Jellyfin, Plex |
 | **Monitoring**       | Beszel, Glances, Uptime Kuma |
 | **Proxies**          | Nginx Proxy Manager (NPM), Traefik |
 | **Remote Access**    | Cloudflared |

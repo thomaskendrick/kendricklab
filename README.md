@@ -55,7 +55,9 @@ Because all work and no play makes the server a dull boy.
 
 *   **Books**: `books/booklore` - eBook management (Booklore).
 *   **Games**: `games/core-keeper` - Dedicated server for Core Keeper.
-*   **Media**: `media/` - (Coming Soon) The media stack.
+*   **Media - Jellyfin**: `media/jellyfin` - Jellyfin Media Server.
+*   **Media - Plex**: `media/plex` - Plex Media Server.
+*   **Media - ArrStack**: `media/arrstack` - The *Arr stack.
 
 ### Directory Structure
 
