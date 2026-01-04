@@ -8,7 +8,7 @@ services:
       homepage.name: "AdGuard Home"
       homepage.icon: "adguard-home.png"
       homepage.href: "https://adguard.${DOMAIN}"
-      homepage.description: "DNS Sinkhole"
+      homepage.description: "DNS Sinkhole. No more ads please"
       traefik.enable: "true"
       traefik.http.routers.adguard.rule: "Host(`adguard.${DOMAIN}`)"
       traefik.http.routers.adguard.entrypoints: "https"
