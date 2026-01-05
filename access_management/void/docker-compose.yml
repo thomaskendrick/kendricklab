@@ -12,9 +12,14 @@ services:
       traefik.http.routers.voidauth.rule: "Host(`auth.${DOMAIN}`)"
       traefik.http.routers.voidauth.entryPoints: 'https'
       traefik.http.routers.voidauth.tls: 'true'
+      traefik.http.services.voidauth.loadbalancer.server.port: "3000"
       traefik.http.middlewares.voidauth.forwardAuth.address: 'http://voidauth:3000/api/authz/forward-auth'
       traefik.http.middlewares.voidauth.forwardAuth.trustForwardHeader: 'true'
       traefik.http.middlewares.voidauth.forwardAuth.authResponseHeaders: 'Remote-User,Remote-Name,Remote-Email,Remote-Groups'
+      traefik.docker.network: "traefik_public"
+    networks:
+      - internal
+      - traefik_public
 
   voidauth-db:
     image: postgres:18
@@ -25,3 +30,11 @@ services:
       - ${CONFIGROOT}/voidauth/db:/var/lib/postgresql/18/docker
     healthcheck:
       test: "pg_isready -U postgres -h localhost"
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+  traefik_public:
+    external: true
