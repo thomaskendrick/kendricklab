@@ -12,6 +12,7 @@ services:
       traefik.http.routers.voidauth.rule: "Host(`auth.${DOMAIN}`)"
       traefik.http.routers.voidauth.entryPoints: 'https'
       traefik.http.routers.voidauth.tls: 'true'
+      traefik.http.routers.voidauth.service: "voidauth"
       traefik.http.services.voidauth.loadbalancer.server.port: "3000"
       traefik.http.middlewares.voidauth.forwardAuth.address: 'http://voidauth:3000/api/authz/forward-auth'
       traefik.http.middlewares.voidauth.forwardAuth.trustForwardHeader: 'true'
