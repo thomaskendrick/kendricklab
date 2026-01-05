@@ -27,7 +27,7 @@ services:
     environment:
       POSTGRES_PASSWORD: # required, same as voidauth DB_PASSWORD
     volumes:
-      - ${CONFIGROOT}/voidauth/db:/var/lib/postgresql/18/docker
+      - ${CONFIG_ROOT}/voidauth/db:/var/lib/postgresql/18/docker
     healthcheck:
       test: "pg_isready -U postgres -h localhost"
     networks:
