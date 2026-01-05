@@ -1,0 +1,24 @@
+services:
+  glance:
+    container_name: glance
+    image: glanceapp/glance
+    restart: unless-stopped
+    volumes:
+      - ${CONFIG_ROOT}/glance/config:/app/config
+      - ${CONFIG_ROOT}/glance/assets:/app/assets
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    env_file: .env
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.glance.rule: "Host(glance.`${DOMAIN}`)"
+      traefik.http.routers.glance.entrypoints: "https"
+      traefik.http.routers.glance.tls.certresolver: "cloudflare"
+      traefik.http.routers.glance.service: "glance"
+      traefik.http.services.glance.loadbalancer.server.port: "8080"
+
+networks:
+  traefik_public:
+    external: true
