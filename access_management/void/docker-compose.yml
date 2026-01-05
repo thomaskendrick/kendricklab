@@ -20,6 +20,8 @@ services:
     networks:
       - internal
       - traefik_public
+    env_file:
+      - .env
 
   voidauth-db:
     image: postgres:18
@@ -32,6 +34,8 @@ services:
       test: "pg_isready -U postgres -h localhost"
     networks:
       - internal
+    env_file:
+      - .env
 
 networks:
   internal:
