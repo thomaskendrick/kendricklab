@@ -2,7 +2,6 @@ services:
   hypermind:
     image: ghcr.io/lklynet/hypermind:latest
     container_name: hypermind
-    network_mode: host
     restart: unless-stopped
     environment:
       - PORT=3000
