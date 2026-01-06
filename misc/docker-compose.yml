@@ -1,0 +1,20 @@
+services:
+  hypermind:
+    image: ghcr.io/lklynet/hypermind:latest
+    container_name: hypermind
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hypermind.rule=Host(`hypermind.${DOMAIN}`)"
+      - "traefik.http.routers.hypermind.entrypoints=https"
+      - "traefik.http.routers.hypermind.service=hypermind"
+      - "traefik.http.routers.hypermind.tls.certresolver=cloudflare"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true
