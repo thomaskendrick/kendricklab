@@ -1,0 +1,50 @@
+version: "3"
+services:
+  server:
+    image: docker.io/awinterstein/habitica-server:latest
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      - NODE_DB_URI=mongodb://mongo/habitica
+      - BASE_URL
+      - INVITE_ONLY # change to `true` after registration of initial users, to restrict further registrations
+      - EMAIL_SERVER_URL
+      - EMAIL_SERVER_PORT
+      - EMAIL_SERVER_AUTH_USER
+      - EMAIL_SERVER_AUTH_PASSWORD
+      - ADMIN_EMAIL
+    networks:
+      - traefik_public
+      - habitica
+    labels:
+      traefik.http.routers.habitica.rule: "Host(`habitica.${DOMAIN}`)"
+      traefik.http.routers.habitica.entrypoints: "https"
+      traefik.http.routers.habitica.tls.certresolver: "cloudflare"
+      traefik.http.routers.habitica.service: "habitica"
+      traefik.http.services.habitica.loadbalancer.server.port: "3000"
+
+  mongo:
+    image: docker.io/mongo:latest # better to replace 'latest' with the concrete mongo version (e.g., the most recent one)
+    restart: unless-stopped
+    hostname: mongo
+    command: ["--replSet", "rs", "--bind_ip_all", "--port", "27017"]
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate() }" | mongosh --port 27017 --quiet
+      interval: 10s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+    volumes:
+      - ${CONFIG_ROOT}/habitica/db:/data/db:rw
+      - ${CONFIG_ROOT}/habitica/dbconf:/data/configdb
+    networks:
+      habitica:
+        aliases:
+          - mongo
+networks:
+  habitica:
+    driver: bridge
+  traefik_public:
+    external: true
