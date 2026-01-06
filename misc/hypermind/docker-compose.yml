@@ -9,7 +9,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.hypermind.rule=Host(`hypermind.${DOMAIN}`)"
       - "traefik.http.routers.hypermind.entrypoints=https"
-      - "traefik.http.routers.hypermind.service=hypermind"
+      - "traefik.http.routers.hypermind.service=hypermind-hypermind"
       - "traefik.http.routers.hypermind.tls.certresolver=cloudflare"
       - "traefik.docker.network=traefik_public"
     networks:
