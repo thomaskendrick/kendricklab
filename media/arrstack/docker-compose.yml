@@ -43,6 +43,7 @@ services:
       traefik.http.routers.radarr.entrypoints: "https"
       traefik.http.routers.radarr.service: "radarr"
       traefik.http.routers.radarr.tls.certresolver: "cloudflare"
+      traefik.http.routers.radarr.middlewares: "voidauth@docker"
       traefik.http.services.radarr.loadbalancer.server.port: "7878"
       # Homepage
       homepage.group: "Media"
@@ -70,6 +71,7 @@ services:
       traefik.http.routers.sonarr.entrypoints: "https"
       traefik.http.routers.sonarr.service: "sonarr"
       traefik.http.routers.sonarr.tls.certresolver: "cloudflare"
+      traefik.http.routers.sonarr.middlewares: "voidauth@docker"
       traefik.http.services.sonarr.loadbalancer.server.port: "8989"
       # Homepage
       homepage.group: "Media"
@@ -95,6 +97,7 @@ services:
       traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${DOMAIN}`)"
       traefik.http.routers.prowlarr.entrypoints: "https"
       traefik.http.routers.prowlarr.service: "prowlarr"
+      traefik.http.routers.prowlarr.middlewares: "voidauth@docker"
       traefik.http.routers.prowlarr.tls.certresolver: "cloudflare"
       traefik.http.services.prowlarr.loadbalancer.server.port: "9696"
       # Homepage
@@ -123,6 +126,7 @@ services:
       traefik.http.routers.nzbget.entrypoints: "https"
       traefik.http.routers.nzbget.service: "nzbget"
       traefik.http.routers.nzbget.tls.certresolver: "cloudflare"
+      traefik.http.routers.nzbget.middlewares: "voidauth@docker"
       traefik.http.services.nzbget.loadbalancer.server.port: "6789"
       # Homepage
       homepage.group: "Media"
