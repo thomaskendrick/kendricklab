@@ -18,6 +18,7 @@ services:
       - traefik_public
       - habitica
     labels:
+      traefik.docker.network: "traefik_public"
       traefik.http.routers.habitica.rule: "Host(`habitica.${DOMAIN}`)"
       traefik.http.routers.habitica.entrypoints: "https"
       traefik.http.routers.habitica.tls.certresolver: "cloudflare"
