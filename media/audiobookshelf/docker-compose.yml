@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_PATH}/audiobookshelf/config:/config
+      - ${DOCKER_PATH}/audiobookshelf/metadata:/metadata
+      - ${MEDIA_PATH}/audiobooks:/audiobooks
+      - ${MEDIA_PATH}/podcasts:/podcasts
+    expose:
+      - 80
+    restart: unless-stopped
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.audiobookshelf.rule: "Host(`audiobookshelf.${DOMAIN}`)"
+      traefik.http.routers.audiobookshelf.entrypoints: "https"
+      traefik.http.routers.audiobookshelf.service: "audiobookshelf"
+      traefik.http.routers.audiobookshelf.tls.certresolver: "cloudflare"
+      traefik.http.services.audiobookshelf.loadbalancer.server.port: "80"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true
