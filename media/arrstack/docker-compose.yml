@@ -9,7 +9,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
-      # - DNS_ADDRESS=10.2.0.1
+      - DNS_ADDRESS=10.8.8.1
       - VPN_SERVICE_PROVIDER=protonvpn
       - VPN_TYPE=openvpn
       # - WIREGUARD_PRIVATE_KEY=${PROTONVPN_WIREGUARD_PRIVATE_KEY}
