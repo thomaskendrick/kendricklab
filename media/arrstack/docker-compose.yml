@@ -9,7 +9,6 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
-      - DNS_ADDRESS=192.168.0.41
       - FIREWALL_OUTBOUND_SUBNETS=172.29.0.0/16,192.168.0.0/16
       - VPN_SERVICE_PROVIDER=protonvpn
       - VPN_TYPE=wireguard
