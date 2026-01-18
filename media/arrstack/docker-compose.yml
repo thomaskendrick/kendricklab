@@ -10,6 +10,7 @@ services:
       - /dev/net/tun:/dev/net/tun
     environment:
       - DNS_ADDRESS=8.8.8.8
+      - FIREWALL_OUTBOUND_SUBNETS=172.29.0.0/16
       - VPN_SERVICE_PROVIDER=protonvpn
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY=${PROTONVPN_WIREGUARD_PRIVATE_KEY}
