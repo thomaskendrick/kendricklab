@@ -14,6 +14,7 @@ services:
       traefik.http.routers.adguard.entrypoints: "https"
       traefik.http.routers.adguard.tls.certresolver: "cloudflare"
       traefik.http.services.adguard.loadbalancer.server.port: "6969"
+      traefik.http.routers.adguard.middlewares: "voidauth@docker"
     network_mode: host
     volumes:
       - ${CONFIG_ROOT}/adguard/work:/opt/adguardhome/work
