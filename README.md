@@ -58,11 +58,14 @@ Because all work and no play makes the server a dull boy.
 *   **Media - Jellyfin**: `media/jellyfin` - Jellyfin Media Server.
 *   **Media - Plex**: `media/plex` - Plex Media Server.
 *   **Media - ArrStack**: `media/arrstack` - The *Arr stack.
+*   **3D Printing**: `3d_printing/spoolman` - Filament inventory manager (Spoolman).
 
 ### Directory Structure
 
 ```
 .
+├── 3d_printing/
+│   └── spoolman/
 ├── books/
 │   └── booklore/
 ├── container_management/
