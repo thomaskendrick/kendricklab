@@ -19,3 +19,9 @@ services:
     volumes:
       - ${CONFIG_ROOT}/adguard/work:/opt/adguardhome/work
       - ${CONFIG_ROOT}/adguard/conf:/opt/adguardhome/conf
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true
