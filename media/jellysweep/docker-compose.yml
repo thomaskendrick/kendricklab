@@ -9,7 +9,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - ${DOCKER_PATH}/jellysweep/config.yml:/app/config.yml
+      - ${DOCKER_PATH}/jellysweep/config.yml:/app/config.yml:ro
       - ${MEDIA_PATH}:/media
     expose:
       - 3002
