@@ -1,0 +1,14 @@
+jellyfin:
+  url: "http://jellyfin:8096" # Internal docker DNS if on same network, or full URL
+  token: "YOUR_JELLYFIN_API_KEY"
+
+# dry_run: true # Set to false to actually delete files
+
+# Library configuration
+libraries:
+  - name: Movies
+    keep: 1
+    age: 30d # Delete movies older than 30 days
+  - name: TV Shows
+    keep: 1
+    age: 30d

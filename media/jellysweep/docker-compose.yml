@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  jellysweep:
+    image: ghcr.io/jon4hz/jellysweep:latest
+    container_name: jellysweep
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ${DOCKER_PATH}/jellysweep/config.yml:/app/config.yml
+      - ${MEDIA_PATH}:/media
+    expose:
+      - 3002
+    restart: unless-stopped
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.jellysweep.rule: "Host(`jellysweep.${DOMAIN}`)"
+      traefik.http.routers.jellysweep.entrypoints: "https"
+      traefik.http.routers.jellysweep.service: "jellysweep"
+      traefik.http.routers.jellysweep.tls.certresolver: "cloudflare"
+      traefik.http.services.jellysweep.loadbalancer.server.port: "3002"
+      # Homepage
+      homepage.group: "Media"
+      homepage.name: "Jellysweep"
+      homepage.icon: "jellyfin.svg" # Using Jellyfin icon as placeholder
+      homepage.href: "https://jellysweep.${DOMAIN}"
+      homepage.description: "Jellyfin Cleanup Tool"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true
