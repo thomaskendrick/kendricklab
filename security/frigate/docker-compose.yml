@@ -3,7 +3,7 @@ version: "3.9"
 services:
   frigate:
     container_name: frigate
-    image: ghcr.io/blakeblackshear/frigate:stable
+    image: ghcr.io/blakeblackshear/frigate:stable-tensorrt
     shm_size: "512mb" # Update based on camera resolution and count
     privileged: true # Add this
     devices:
