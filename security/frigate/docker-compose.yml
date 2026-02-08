@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  frigate:
+    container_name: frigate
+    image: ghcr.io/blakeblackshear/frigate:stable
+    shm_size: "64mb" # Update based on camera resolution and count
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128 # For Intel hardware acceleration
+      # - /dev/bus/usb:/dev/bus/usb # Google Coral USB
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_ROOT}/frigate:/config
+      - ${CONFIG_ROOT}/frigate/storage:/media/frigate
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "5000:5000"
+      - "8554:8554" # RTSP feeds
+      - "8555:8555/tcp" # WebRTC
+      - "8555:8555/udp" # WebRTC
+    restart: unless-stopped
+    labels:
+      # Traefik
+      traefik.enable: "true"
+      traefik.http.routers.frigate.rule: "Host(`frigate.${DOMAIN}`)"
+      traefik.http.routers.frigate.entrypoints: "https"
+      traefik.http.routers.frigate.service: "frigate"
+      traefik.http.routers.frigate.tls.certresolver: "cloudflare"
+      traefik.http.services.frigate.loadbalancer.server.port: "5000"
+      # Homepage
+      homepage.group: "Security"
+      homepage.name: "Frigate"
+      homepage.icon: "frigate.svg"
+      homepage.href: "https://frigate.${DOMAIN}"
+      homepage.description: "NVR with AI object detection"
+    networks:
+      - traefik_public
+
+networks:
+  traefik_public:
+    external: true
