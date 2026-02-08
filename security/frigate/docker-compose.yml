@@ -6,10 +6,6 @@ services:
     image: ghcr.io/blakeblackshear/frigate:stable
     shm_size: "512mb" # Update based on camera resolution and count
     privileged: true # Add this
-    environment:
-      - LIBVA_DRIVER_NAME=iHD # Forces the correct driver for your iGPU
-      - NEOReadDebugKeys=1
-      - OverrideGpuAddressSpace=48
     devices:
       - /dev/dri:/dev/dri # For Intel hardware acceleration
       # - /dev/bus/usb:/dev/bus/usb # Google Coral USB
