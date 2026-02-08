@@ -5,6 +5,9 @@ services:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:stable
     shm_size: "256mb" # Update based on camera resolution and count
+    privileged: true # Add this
+    environment:
+      - LIBVA_DRIVER_NAME=iHD # Forces the correct driver for your iGPU
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128 # For Intel hardware acceleration
       # - /dev/bus/usb:/dev/bus/usb # Google Coral USB
