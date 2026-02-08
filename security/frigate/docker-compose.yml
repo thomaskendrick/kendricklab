@@ -41,9 +41,3 @@ services:
       homepage.icon: "frigate.svg"
       homepage.href: "https://frigate.${DOMAIN}"
       homepage.description: "NVR with AI object detection"
-    networks:
-      - traefik_public
-
-networks:
-  traefik_public:
-    external: true
