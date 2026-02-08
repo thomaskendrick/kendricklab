@@ -4,7 +4,7 @@ services:
   frigate:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:stable
-    shm_size: "64mb" # Update based on camera resolution and count
+    shm_size: "256mb" # Update based on camera resolution and count
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128 # For Intel hardware acceleration
       # - /dev/bus/usb:/dev/bus/usb # Google Coral USB
