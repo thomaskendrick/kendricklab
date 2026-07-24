@@ -26,7 +26,23 @@ services:
     restart: unless-stopped
     networks:
       - traefik_public
-
+  questarr:
+    image: ghcr.io/doezer/questarr:latest
+    container_name: questarr
+    network_mode: service:gluetun
+    restart: unless-stopped
+    volumes:
+      - ${CONFIG_ROOT}:/app/data
+      - ${MEDIA_PATH}:/media
+    # Traefik
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.questarr.rule: "Host(`questarr.${DOMAIN}`)"
+      traefik.http.routers.questarr.entrypoints: "https"
+      traefik.http.routers.questarr.service: "questarr"
+      traefik.http.routers.questarr.tls.certresolver: "cloudflare"
+      traefik.http.routers.questarr.middlewares: "voidauth@docker"
+      traefik.http.services.questarr.loadbalancer.server.port: "5000"
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
